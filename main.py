@@ -11,7 +11,7 @@ Created on Thu Jan 31 11:00:18 2019
 #       3x_1 + 2x_2 + 4x_3   >= 2700
 #        x >= 0 
 #------------------------------------------------------------------------------
-from bovespa_records import split_company_data
+from bovespa_records import get_std_each_company
 import numpy as np
 from scipy.optimize import linprog
 from numpy.linalg import solve
@@ -34,7 +34,7 @@ def desigualdade():
 #------------------------------------------------------------------------------    
 resultado=resolverPLDesigualdade(c, A_ub, b_ub) #resolver PL
 #------------------------------------------------------------------------------    
-split_company_data('bovespa_march.txt')
+get_std_each_company('bovespa_march.txt')
 print('Valor otimo:', resultado.fun)
 #------------------------------------------------------------------------------    
 print("Os valores de x sao:")

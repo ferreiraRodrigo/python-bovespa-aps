@@ -1,44 +1,32 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jan 31 11:00:18 2019
-
-@author: sergio.amonteiro
-"""
-#------------------------------------------------------------------------------
-#minimize 70x_1 + 80x_2 +85x_3
-#{ s.a.} x_1 + 4x_2 + 8x_3   >= 4500
-#      40x_1 + 30x_2 + 20x_3 <= 36000
-#       3x_1 + 2x_2 + 4x_3   >= 2700
-#        x >= 0 
-#------------------------------------------------------------------------------
-from bovespa_records import get_std_each_company
+import random
 import numpy as np
 from scipy.optimize import linprog
-from numpy.linalg import solve
-#------------------------------------------------------------------------------
-def resolverPLDesigualdade(c, A_ub, b_ub):
-    res = linprog(c, A_ub=A_ub, b_ub=b_ub,
-                  bounds=(0, None))
-    return res
-#------------------------------------------------------------------------------    
-def desigualdade():
-    A_ub = np.array([[1, 0, 2, 2, 1, 2],
-                     [0, 1, 3, 1, 3, 2]])
-    b_ub = np.array([9, 19])
-    c = -1 * np.array([35, 30, 60, 50, 27, 22])
-    return c, A_ub, b_ub
-#------------------------------------------------------------------------------    
-#Programa Principal    
-#------------------------------------------------------------------------------    
-[c, A_ub, b_ub]=desigualdade()
-#------------------------------------------------------------------------------    
-resultado=resolverPLDesigualdade(c, A_ub, b_ub) #resolver PL
-#------------------------------------------------------------------------------    
-get_std_each_company('bovespa_march.txt')
-print('Valor otimo:', resultado.fun)
-#------------------------------------------------------------------------------    
-print("Os valores de x sao:")
-nelem=len(resultado.x)
-for i in range(nelem):
-    print("x[",i+1,"]=",resultado.x[i])
-#------------------------------------------------------------------------------        
+from bovespa_records import get_company_data
+
+[companys_deviation, companys_name] = get_company_data('bovespa_march.txt')
+
+# Set the companys data on arrays
+def maximize_arrays():
+    accepeted_risk = 1
+
+    A = np.array([companys_deviation, np.ones(len(companys_deviation))])
+    b = np.array([accepeted_risk, 1])
+
+    random_array = []
+    for i in range(0, len(companys_deviation)):
+        random_array.append(random.randint(1, 5))
+    c = np.array(random_array)
+
+    # c * -1 to maximize instead of minimize
+    return c * -1, A, b
+
+def maximize(c, A, b):
+    resp = linprog(c, A_ub, b_ub = b, bounds = (0, None))
+    return resp
+
+[c, A_ub, b_ub] = maximize_arrays()
+results = maximize(c, A_ub, b_ub) 
+
+for i in range(len(results.x)):
+    if(results.x[i] > 0):
+        print("{} : {:.6f}%".format(companys_name[i] ,results.x[i] * 100))

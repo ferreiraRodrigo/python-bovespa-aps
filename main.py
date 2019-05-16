@@ -14,7 +14,7 @@ def maximize_arrays():
 
     random_array = []
     for i in range(0, len(companys_deviation)):
-        random_array.append(random.randint(1, 5))
+        random_array.append(random.randint(1, 10))
     c = np.array(random_array)
 
     # c * -1 to maximize instead of minimize

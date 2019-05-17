@@ -1,4 +1,3 @@
-import random
 import numpy as np
 from scipy.optimize import linprog
 from bovespa_records import get_company_data

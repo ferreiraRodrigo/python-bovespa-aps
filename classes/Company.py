@@ -22,6 +22,7 @@ class Company:
         
         return sum(profit_history) / len(profit_history)
     
+    # Return companys profit history(relative value)
     def get_profit_history(self):
         profit_history = []
         for i in range(len(self.price_open_history)):

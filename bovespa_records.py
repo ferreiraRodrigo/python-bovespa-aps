@@ -15,16 +15,24 @@ def split_company_data(file):
                         companys_index.append(bovespa_record.company_name)
                         new_company = Company(bovespa_record.company_name)
                         new_company.add_price(bovespa_record.price_open ,bovespa_record.price_close)
-                        companys.append(new_company)
+                        companys.append(new_company)    
+
         return companys, companys_index
 
 #Return both risk and average profit for each comapny         
-def get_company_data(file):
+def get_company_data(file, minimum_activity):
         standard_deviation = []
         average_profit = []
+        profit_history = []
+
         [companys, companys_name] = split_company_data(file)
-        for company in companys:
-                standard_deviation.append(company.get_standard_deviation())
-                average_profit.append(company.get_average_profit())
-        
-        return standard_deviation, average_profit, companys_name
+        for index, company in enumerate(companys):
+                if(len(company.price_close_history) < minimum_activity):
+                        companys.pop(index)
+                        companys_name.pop(index)
+                else:
+                        standard_deviation.append(company.get_standard_deviation())
+                        average_profit.append(company.get_average_profit())
+                        profit_history.append(company.get_profit_history())
+
+        return standard_deviation, average_profit, profit_history, companys_name

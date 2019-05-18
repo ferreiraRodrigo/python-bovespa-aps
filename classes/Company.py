@@ -19,4 +19,12 @@ class Company:
         profit_history = []
         for i in range(len(self.price_open_history)):
             profit_history.append((self.price_close_history[i] - self.price_open_history[i]) * 100 / self.price_close_history[i])
+        
         return sum(profit_history) / len(profit_history)
+    
+    def get_profit_history(self):
+        profit_history = []
+        for i in range(len(self.price_open_history)):
+            profit_history.append((self.price_close_history[i] - self.price_open_history[i]) * 100 / self.price_close_history[i])
+        
+        return profit_history

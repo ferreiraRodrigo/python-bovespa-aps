@@ -5,8 +5,9 @@ from bovespa_records import get_company_data
 # Set the companys data on arrays
 [companys_deviation, companys_profit, profit_history, companys_name] = get_company_data('bovespa_march.txt', 20)
 
+risk_accepted = float(input("What is the acceptable risk? (10 = 10%)\n")) / 100
+
 def maximize_arrays():
-        risk_accepted = 0.1
 
         A_ub = np.array([companys_deviation, np.ones(len(companys_deviation))])
         b_ub = np.array([[risk_accepted], [1]])
@@ -25,5 +26,5 @@ results = maximize(c, A_ub, b_ub)
 print("\nInvestiments: \n")
 for i in range(len(results.x)):
         if(results.x[i] > 0):
-                print("{} : {:.5f}%".format(companys_name[i] ,results.x[i] * 100))
-                print("The {} have a {:.5f}% of risk and {:.5f}% of average profit\n".format(companys_name[i], companys_deviation[i], companys_profit[i]))
+                print("{} : {:.5f}% of total investiment.".format(companys_name[i] ,results.x[i] * 100))
+                print("The {} have a {:.5f}% of risk and {:.5f}% of average profit.\n".format(companys_name[i], companys_deviation[i] * 100, companys_profit[i]))
